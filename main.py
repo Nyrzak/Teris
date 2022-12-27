@@ -77,10 +77,10 @@ while True:
     sc.blit(bg, (0, 0))
     sc.blit(game_sc, (20, 20))
     game_sc.blit(game_bg, (0, 0))
-    # delay for full lines
+    # Задержка для полных строк
     for i in range(lines):
         pygame.time.wait(200)
-    # control
+    # управление
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             exit()
@@ -93,14 +93,14 @@ while True:
                 anim_limit = 100
             elif event.key == pygame.K_UP:
                 rotate = True
-    # move x
+    # движение x
     figure_old = deepcopy(figure)
     for i in range(4):
         figure[i].x += dx
         if not check_borders():
             figure = deepcopy(figure_old)
             break
-    # move y
+    # движение y
     anim_count += anim_speed
     if anim_count > anim_limit:
         anim_count = 0
@@ -114,7 +114,7 @@ while True:
                 next_figure, next_color = deepcopy(choice(figures)), get_color()
                 anim_limit = 2000
                 break
-    # rotate
+    # вращение
     center = figure[0]
     figure_old = deepcopy(figure)
     if rotate:
@@ -126,7 +126,7 @@ while True:
             if not check_borders():
                 figure = deepcopy(figure_old)
                 break
-    # check lines
+    # проверка линии
     line, lines = H - 1, 0
     for row in range(H - 1, -1, -1):
         count = 0
@@ -139,33 +139,33 @@ while True:
         else:
             anim_speed += 3
             lines += 1
-    # compute score
+    # вычисление очков
     score += scores[lines]
-    # draw grid
+    # отрисовка сетки
     [pygame.draw.rect(game_sc, (40, 40, 40), i_rect, 1) for i_rect in grid]
-    # draw figure
+    # отрисовка фигур
     for i in range(4):
         figure_rect.x = figure[i].x * TILE
         figure_rect.y = figure[i].y * TILE
         pygame.draw.rect(game_sc, color, figure_rect)
-    # draw field
+    # отрисовка поля
     for y, raw in enumerate(field):
         for x, col in enumerate(raw):
             if col:
                 figure_rect.x, figure_rect.y = x * TILE, y * TILE
                 pygame.draw.rect(game_sc, col, figure_rect)
-    # draw next figure
+    # отрисовка следующей фигуры
     for i in range(4):
         figure_rect.x = next_figure[i].x * TILE + 380
         figure_rect.y = next_figure[i].y * TILE + 185
         pygame.draw.rect(sc, next_color, figure_rect)
-    # draw titles
+    # отрисовка результатов
     sc.blit(title_tetris, (485, -10))
     sc.blit(title_score, (535, 780))
     sc.blit(font.render(str(score), True, pygame.Color('white')), (550, 840))
     sc.blit(title_record, (525, 650))
     sc.blit(font.render(record, True, pygame.Color('gold')), (550, 710))
-    # game over
+    # конец игры
     for i in range(W):
         if field[0][i]:
             set_record(record, score)
